@@ -2,6 +2,7 @@ package com.lsw.weather.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class WeatherEntity {
         this.HeWeather = HeWeather;
     }
 
-    public static class HeWeatherBean {
+    public static class HeWeatherBean implements Serializable{
         /**
          * aqi : {"city":{"aqi":"500","co":"8","no2":"179","o3":"4","pm10":"617","pm25":"451","qlty":"严重污染","so2":"13"}}
          * basic : {"city":"北京","cnty":"中国","id":"CN101010100","lat":"39.904000","lon":"116.391000","update":{"loc":"2017-01-03 21:54","utc":"2017-01-03 13:54"}}
@@ -102,7 +103,7 @@ public class WeatherEntity {
             this.hourly_forecast = hourly_forecast;
         }
 
-        public static class AqiBean {
+        public static class AqiBean implements Serializable{
             /**
              * city : {"aqi":"500","co":"8","no2":"179","o3":"4","pm10":"617","pm25":"451","qlty":"严重污染","so2":"13"}
              */
@@ -117,7 +118,7 @@ public class WeatherEntity {
                 this.city = city;
             }
 
-            public static class CityBean {
+            public static class CityBean implements Serializable{
                 /**
                  * aqi : 500
                  * co : 8
@@ -128,14 +129,21 @@ public class WeatherEntity {
                  * qlty : 严重污染
                  * so2 : 13
                  */
-
+                @SerializedName("aqi")
                 private String aqi;
+                @SerializedName("co")
                 private String co;
+                @SerializedName("no2")
                 private String no2;
+                @SerializedName("o3")
                 private String o3;
+                @SerializedName("pm10")
                 private String pm10;
+                @SerializedName("pm25")
                 private String pm25;
+                @SerializedName("qlty")
                 private String qlty;
+                @SerializedName("so2")
                 private String so2;
 
                 public String getAqi() {
@@ -204,7 +212,7 @@ public class WeatherEntity {
             }
         }
 
-        public static class BasicBean {
+        public static class BasicBean implements Serializable{
             /**
              * city : 北京
              * cnty : 中国
@@ -215,10 +223,15 @@ public class WeatherEntity {
              */
             @SerializedName("city")
             private String city;
+            @SerializedName("cnty")
             private String cnty;
+            @SerializedName("id")
             private String id;
+            @SerializedName("lat")
             private String lat;
+            @SerializedName("lon")
             private String lon;
+            @SerializedName("update")
             private UpdateBean update;
 
             public String getCity() {
@@ -269,13 +282,14 @@ public class WeatherEntity {
                 this.update = update;
             }
 
-            public static class UpdateBean {
+            public static class UpdateBean implements Serializable{
                 /**
                  * loc : 2017-01-03 21:54
                  * utc : 2017-01-03 13:54
                  */
-
+                @SerializedName("loc")
                 private String loc;
+                @SerializedName("utc")
                 private String utc;
 
                 public String getLoc() {
@@ -296,7 +310,7 @@ public class WeatherEntity {
             }
         }
 
-        public static class NowBean {
+        public static class NowBean implements Serializable{
             /**
              * cond : {"code":"501","txt":"雾"}
              * fl : -4
@@ -308,13 +322,21 @@ public class WeatherEntity {
              * wind : {"deg":"80","dir":"北风","sc":"微风","spd":"4"}
              */
 
+            @SerializedName("cond")
             private CondBean cond;
+            @SerializedName("fl")
             private String fl;
+            @SerializedName("hum")
             private String hum;
+            @SerializedName("pcpn")
             private String pcpn;
+            @SerializedName("pres")
             private String pres;
+            @SerializedName("tmp")
             private String tmp;
+            @SerializedName("vis")
             private String vis;
+            @SerializedName("wind")
             private WindBean wind;
 
             public CondBean getCond() {
@@ -381,13 +403,15 @@ public class WeatherEntity {
                 this.wind = wind;
             }
 
-            public static class CondBean {
+            public static class CondBean implements Serializable{
                 /**
                  * code : 501
                  * txt : 雾
                  */
 
+                @SerializedName("code")
                 private String code;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getCode() {
@@ -407,7 +431,7 @@ public class WeatherEntity {
                 }
             }
 
-            public static class WindBean {
+            public static class WindBean implements Serializable{
                 /**
                  * deg : 80
                  * dir : 北风
@@ -415,9 +439,13 @@ public class WeatherEntity {
                  * spd : 4
                  */
 
+                @SerializedName("deg")
                 private String deg;
+                @SerializedName("dir")
                 private String dir;
+                @SerializedName("sc")
                 private String sc;
+                @SerializedName("spd")
                 private String spd;
 
                 public String getDeg() {
@@ -454,7 +482,7 @@ public class WeatherEntity {
             }
         }
 
-        public static class SuggestionBean {
+        public static class SuggestionBean implements Serializable{
             /**
              * air : {"brf":"很差","txt":"气象条件不利于空气污染物稀释、扩散和清除，请尽量避免在室外长时间活动。"}
              * comf : {"brf":"较舒适","txt":"白天天气阴沉，会感到有点儿凉，但大部分人完全可以接受。"}
@@ -466,13 +494,21 @@ public class WeatherEntity {
              * uv : {"brf":"最弱","txt":"属弱紫外线辐射天气，无需特别防护。若长期在户外，建议涂擦SPF在8-12之间的防晒护肤品。"}
              */
 
+            @SerializedName("air")
             private AirBean air;
+            @SerializedName("comf")
             private ComfBean comf;
+            @SerializedName("cw")
             private CwBean cw;
+            @SerializedName("drsg")
             private DrsgBean drsg;
+            @SerializedName("flu")
             private FluBean flu;
+            @SerializedName("sport")
             private SportBean sport;
+            @SerializedName("trav")
             private TravBean trav;
+            @SerializedName("uv")
             private UvBean uv;
 
             public AirBean getAir() {
@@ -539,13 +575,15 @@ public class WeatherEntity {
                 this.uv = uv;
             }
 
-            public static class AirBean {
+            public static class AirBean implements Serializable{
                 /**
                  * brf : 很差
                  * txt : 气象条件不利于空气污染物稀释、扩散和清除，请尽量避免在室外长时间活动。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -565,13 +603,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class ComfBean {
+            public static class ComfBean implements Serializable{
                 /**
                  * brf : 较舒适
                  * txt : 白天天气阴沉，会感到有点儿凉，但大部分人完全可以接受。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -591,13 +631,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class CwBean {
+            public static class CwBean implements Serializable{
                 /**
                  * brf : 不宜
                  * txt : 不宜洗车，未来24小时内有霾，如果在此期间洗车，会弄脏您的爱车。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -617,13 +659,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class DrsgBean {
+            public static class DrsgBean implements Serializable{
                 /**
                  * brf : 较冷
                  * txt : 建议着厚外套加毛衣等服装。年老体弱者宜着大衣、呢外套加羊毛衫。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -643,13 +687,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class FluBean {
+            public static class FluBean implements Serializable{
                 /**
                  * brf : 极易发
                  * txt : 昼夜温差极大，且空气湿度较大，寒冷潮湿，极易发生感冒，请特别注意增减衣服保暖防寒。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -669,13 +715,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class SportBean {
+            public static class SportBean implements Serializable{
                 /**
                  * brf : 较不宜
                  * txt : 有扬沙或浮尘，建议适当停止户外运动，选择在室内进行运动，以避免吸入更多沙尘，有损健康。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -695,13 +743,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class TravBean {
+            public static class TravBean implements Serializable{
                 /**
                  * brf : 较不宜
                  * txt : 空气质量差，不适宜旅游
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -721,13 +771,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class UvBean {
+            public static class UvBean implements Serializable{
                 /**
                  * brf : 最弱
                  * txt : 属弱紫外线辐射天气，无需特别防护。若长期在户外，建议涂擦SPF在8-12之间的防晒护肤品。
                  */
 
+                @SerializedName("brf")
                 private String brf;
+                @SerializedName("txt")
                 private String txt;
 
                 public String getBrf() {
@@ -748,7 +800,7 @@ public class WeatherEntity {
             }
         }
 
-        public static class DailyForecastBean {
+        public static class DailyForecastBean implements Serializable{
             /**
              * astro : {"sr":"07:36","ss":"17:01"}
              * cond : {"code_d":"100","code_n":"502","txt_d":"晴","txt_n":"霾"}
@@ -763,16 +815,27 @@ public class WeatherEntity {
              * wind : {"deg":"327","dir":"南风","sc":"微风","spd":"4"}
              */
 
+            @SerializedName("astro")
             private AstroBean astro;
+            @SerializedName("cond")
             private CondBeanX cond;
+            @SerializedName("date")
             private String date;
+            @SerializedName("hum")
             private String hum;
+            @SerializedName("pcpn")
             private String pcpn;
+            @SerializedName("pop")
             private String pop;
+            @SerializedName("pres")
             private String pres;
+            @SerializedName("tmp")
             private TmpBean tmp;
+            @SerializedName("uv")
             private String uv;
+            @SerializedName("vis")
             private String vis;
+            @SerializedName("wind")
             private WindBeanX wind;
 
             public AstroBean getAstro() {
@@ -863,13 +926,15 @@ public class WeatherEntity {
                 this.wind = wind;
             }
 
-            public static class AstroBean {
+            public static class AstroBean implements Serializable{
                 /**
                  * sr : 07:36
                  * ss : 17:01
                  */
 
+                @SerializedName("sr")
                 private String sr;
+                @SerializedName("ss")
                 private String ss;
 
                 public String getSr() {
@@ -889,7 +954,7 @@ public class WeatherEntity {
                 }
             }
 
-            public static class CondBeanX {
+            public static class CondBeanX implements Serializable{
                 /**
                  * code_d : 100
                  * code_n : 502
@@ -897,9 +962,13 @@ public class WeatherEntity {
                  * txt_n : 霾
                  */
 
+                @SerializedName("code_d")
                 private String code_d;
+                @SerializedName("code_n")
                 private String code_n;
+                @SerializedName("txt_d")
                 private String txt_d;
+                @SerializedName("txt_n")
                 private String txt_n;
 
                 public String getCode_d() {
@@ -935,13 +1004,15 @@ public class WeatherEntity {
                 }
             }
 
-            public static class TmpBean {
+            public static class TmpBean implements Serializable{
                 /**
                  * max : 5
                  * min : -5
                  */
 
+                @SerializedName("max")
                 private String max;
+                @SerializedName("min")
                 private String min;
 
                 public String getMax() {
@@ -961,7 +1032,7 @@ public class WeatherEntity {
                 }
             }
 
-            public static class WindBeanX {
+            public static class WindBeanX implements Serializable{
                 /**
                  * deg : 327
                  * dir : 南风
@@ -969,9 +1040,13 @@ public class WeatherEntity {
                  * spd : 4
                  */
 
+                @SerializedName("deg")
                 private String deg;
+                @SerializedName("dir")
                 private String dir;
+                @SerializedName("sc")
                 private String sc;
+                @SerializedName("spd")
                 private String spd;
 
                 public String getDeg() {
@@ -1008,7 +1083,7 @@ public class WeatherEntity {
             }
         }
 
-        public static class HourlyForecastBean {
+        public static class HourlyForecastBean implements Serializable{
             /**
              * date : 2017-01-03 22:00
              * hum : 46
@@ -1018,11 +1093,17 @@ public class WeatherEntity {
              * wind : {"deg":"310","dir":"西北风","sc":"微风","spd":"4"}
              */
 
+            @SerializedName("date")
             private String date;
+            @SerializedName("hum")
             private String hum;
+            @SerializedName("pop")
             private String pop;
+            @SerializedName("pres")
             private String pres;
+            @SerializedName("tmp")
             private String tmp;
+            @SerializedName("wind")
             private WindBeanXX wind;
 
             public String getDate() {
@@ -1073,7 +1154,7 @@ public class WeatherEntity {
                 this.wind = wind;
             }
 
-            public static class WindBeanXX {
+            public static class WindBeanXX implements Serializable{
                 /**
                  * deg : 310
                  * dir : 西北风
@@ -1081,9 +1162,13 @@ public class WeatherEntity {
                  * spd : 4
                  */
 
+                @SerializedName("deg")
                 private String deg;
+                @SerializedName("dir")
                 private String dir;
+                @SerializedName("sc")
                 private String sc;
+                @SerializedName("spd")
                 private String spd;
 
                 public String getDeg() {

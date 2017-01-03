@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         call.enqueue(new Callback<WeatherEntity>() {
             @Override
             public void onResponse(Call<WeatherEntity> call, Response<WeatherEntity> response) {
-                Log.d("sweeney---", "onResponse: "+response.body().getHeWeather().get(0).getStatus());
+                Log.d("sweeney---", "onResponse: "+response.body().getHeWeather().get(0).getBasic().getCity());
             }
 
             @Override
