@@ -23,14 +23,11 @@ import android.widget.TextView;
 
 import com.lsw.weather.R;
 import com.lsw.weather.api.WeatherApi;
-import com.lsw.weather.http.URL;
+import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.model.WeatherEntity;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -108,16 +105,16 @@ public class MainActivity extends AppCompatActivity
     private void loadWeatherData() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL.WEATHER)
+                .baseUrl(HttpUtil.WEATHER_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
-        Call<WeatherEntity> call = weatherApi.getWeather("beijing","99df2f4473bc40fb9990d2317e07c6ae");
+        Call<WeatherEntity> call = weatherApi.getWeather("beijing",HttpUtil.WEATHER_URL);
         call.enqueue(new Callback<WeatherEntity>() {
             @Override
             public void onResponse(Call<WeatherEntity> call, Response<WeatherEntity> response) {
-                Log.d("sweeney---", "onResponse: "+response.body().getHeWeather5().get(0).getBasic().getCity());
+                Log.d("sweeney---", "onResponse: "+response.body().getHeWeather().get(0).getStatus());
             }
 
             @Override
