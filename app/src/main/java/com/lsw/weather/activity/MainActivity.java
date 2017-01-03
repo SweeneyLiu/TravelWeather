@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +22,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lsw.weather.R;
+import com.lsw.weather.api.WeatherApi;
+import com.lsw.weather.http.URL;
+import com.lsw.weather.model.WeatherEntity;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,6 +79,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
+        loadWeatherData();
+
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_orange, R.color.bg_blue, R.color.bg_green, R.color.bg_red);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -89,6 +103,28 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         navView.setNavigationItemSelectedListener(this);
+    }
+
+    private void loadWeatherData() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL.WEATHER)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WeatherApi weatherApi = retrofit.create(WeatherApi.class);
+        Call<WeatherEntity> call = weatherApi.getWeather("beijing","99df2f4473bc40fb9990d2317e07c6ae");
+        call.enqueue(new Callback<WeatherEntity>() {
+            @Override
+            public void onResponse(Call<WeatherEntity> call, Response<WeatherEntity> response) {
+                Log.d("sweeney---", "onResponse: "+response.body().getHeWeather5().get(0).getBasic().getCity());
+            }
+
+            @Override
+            public void onFailure(Call<WeatherEntity> call, Throwable t) {
+                Log.d("sweeney---", "onFailure: "+t.getMessage());
+            }
+        });
     }
 
     @Override
