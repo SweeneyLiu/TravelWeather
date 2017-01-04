@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
-        Call<WeatherEntity> call = weatherApi.getWeather("beijing",HttpUtil.WEATHER_URL);
+        Call<WeatherEntity> call = weatherApi.getWeather("beijing",HttpUtil.HE_WEATHER_KEY);
         call.enqueue(new Callback<WeatherEntity>() {
             @Override
             public void onResponse(Call<WeatherEntity> call, Response<WeatherEntity> response) {
