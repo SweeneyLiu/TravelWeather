@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lsw.weather.R;
+import com.lsw.weather.adapter.DailyForecastAdapter;
+import com.lsw.weather.adapter.HourlyForecastAdapter;
+import com.lsw.weather.adapter.SuggestionAdapter;
 import com.lsw.weather.api.WeatherApi;
-import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.model.WeatherEntity;
+import com.lsw.weather.model.WeatherEntity.HeWeatherBean;
+import com.lsw.weather.util.HttpUtil;
+import com.lsw.weather.util.ImageUtils;
+import com.lsw.weather.view.ScrollListView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +41,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.iv_weather_image)
     ImageView ivWeatherImage;
@@ -67,6 +73,12 @@ public class MainActivity extends AppCompatActivity
     LinearLayout llWeatherContainer;
     @BindView(R.id.nested_scroll_view)
     NestedScrollView nestedScrollView;
+    @BindView(R.id.lv_hourly_forecast)
+    ScrollListView lvHourlyForecast;
+    @BindView(R.id.lv_daily_forecast)
+    ScrollListView lvDailyForecast;
+    @BindView(R.id.lv_suggestion)
+    ScrollListView lvSuggestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +95,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
+                loadWeatherData();
             }
         });
 
@@ -110,16 +123,18 @@ public class MainActivity extends AppCompatActivity
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
-        Call<WeatherEntity> call = weatherApi.getWeather("beijing",HttpUtil.HE_WEATHER_KEY);
+        Call<WeatherEntity> call = weatherApi.getWeather("beijing", HttpUtil.HE_WEATHER_KEY);
         call.enqueue(new Callback<WeatherEntity>() {
             @Override
             public void onResponse(Call<WeatherEntity> call, Response<WeatherEntity> response) {
-                Log.d("sweeney---", "onResponse: "+response.body().getHeWeather().get(0).getBasic().getCity());
+                Log.d("sweeney---", "onResponse: " + response.body().getHeWeather().get(0).getBasic().getCity());
+                updateView(response.body().getHeWeather().get(0));
+                swipeRefreshLayout.setEnabled(false);
             }
 
             @Override
             public void onFailure(Call<WeatherEntity> call, Throwable t) {
-                Log.d("sweeney---", "onFailure: "+t.getMessage());
+                Log.d("sweeney---", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -179,4 +194,23 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void updateView(HeWeatherBean weather) {
+        ivWeatherImage.setImageResource(ImageUtils.getWeatherImage(weather.getNow().getCond().getTxt()));
+        ivIcon.setImageResource(ImageUtils.getIconByCode(this, weather.getNow().getCond().getCode()));
+        tvTemp.setText(getString(R.string.tempC, weather.getNow().getTmp()));
+        tvMaxTemp.setText(getString(R.string.now_max_temp, weather.getDaily_forecast().get(0).getTmp().getMax()));
+        tvMinTemp.setText(getString(R.string.now_min_temp, weather.getDaily_forecast().get(0).getTmp().getMin()));
+        StringBuilder sb = new StringBuilder();
+        sb.append("体感").append(weather.getNow().getFl()).append("°");
+        if (weather.getAqi() != null && !TextUtils.isEmpty(weather.getAqi().getCity().getQlty())) {
+            sb.append("  ").append(weather.getAqi().getCity().getQlty().contains("污染") ? "" : "空气").append(weather.getAqi().getCity().getQlty());
+        }
+        sb.append("  ").append(weather.getNow().getWind().getDir()).append(weather.getNow().getWind().getSc()).append(weather.getNow().getWind().getSc().contains("风") ? "" : "级");
+        tvMoreInfo.setText(sb.toString());
+        lvHourlyForecast.setAdapter(new HourlyForecastAdapter(weather.getHourly_forecast()));
+        lvDailyForecast.setAdapter(new DailyForecastAdapter(weather.getDaily_forecast()));
+        lvSuggestion.setAdapter(new SuggestionAdapter(weather.getSuggestion()));
+    }
+
 }

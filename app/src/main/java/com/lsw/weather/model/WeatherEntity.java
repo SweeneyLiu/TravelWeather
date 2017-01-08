@@ -1205,4 +1205,21 @@ public class WeatherEntity {
             }
         }
     }
+
+    public static class Entity {
+        /**
+         * 简介
+         */
+        public String brf;
+        /**
+         * 详情
+         */
+        public String txt;
+
+        public Entity(String brf, String txt) {
+            this.brf = brf;
+            this.txt = txt;
+        }
+    }
+
 }
