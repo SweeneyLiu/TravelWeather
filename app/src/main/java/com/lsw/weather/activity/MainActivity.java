@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.lsw.weather.model.WeatherEntity;
 import com.lsw.weather.model.WeatherEntity.HeWeatherBean;
 import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.util.ImageUtils;
+import com.lsw.weather.util.SnackbarUtils;
 import com.lsw.weather.view.ScrollListView;
 
 import butterknife.BindView;
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-
+        swipeRefreshLayout.setRefreshing(true);
         loadWeatherData();
 
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_orange, R.color.bg_blue, R.color.bg_green, R.color.bg_red);
@@ -106,8 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
@@ -146,7 +147,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onNext(WeatherEntity entity) {
                         Log.d("sweeney---", "onNext: ");
+                        swipeRefreshLayout.setRefreshing(false);
                         updateView(entity.getHeWeather().get(0));
+                        SnackbarUtils.Short(drawerLayout,"已更新至最新天气").show();
                     }
                 });
     }
