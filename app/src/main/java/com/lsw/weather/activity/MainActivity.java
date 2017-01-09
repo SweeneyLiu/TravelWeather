@@ -39,7 +39,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -119,24 +123,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HttpUtil.WEATHER_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())//添加 json 转换器
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())//添加 RxJava 适配器
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
-        Call<WeatherEntity> call = weatherApi.getWeather("beijing", HttpUtil.HE_WEATHER_KEY);
-        call.enqueue(new Callback<WeatherEntity>() {
-            @Override
-            public void onResponse(Call<WeatherEntity> call, Response<WeatherEntity> response) {
-                Log.d("sweeney---", "onResponse: " + response.body().getHeWeather().get(0).getBasic().getCity());
-                updateView(response.body().getHeWeather().get(0));
-                swipeRefreshLayout.setEnabled(false);
-            }
 
-            @Override
-            public void onFailure(Call<WeatherEntity> call, Throwable t) {
-                Log.d("sweeney---", "onFailure: " + t.getMessage());
-            }
-        });
+        weatherApi.getWeather("beijing", HttpUtil.HE_WEATHER_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WeatherEntity>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("sweeney---", "onCompleted: ");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("sweeney---", "onError: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(WeatherEntity entity) {
+                        Log.d("sweeney---", "onNext: ");
+                        updateView(entity.getHeWeather().get(0));
+                    }
+                });
     }
 
     @Override
