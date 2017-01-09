@@ -129,9 +129,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
 
-        weatherApi.getWeather("beijing", HttpUtil.HE_WEATHER_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        weatherApi.getWeather("beijing", HttpUtil.HE_WEATHER_KEY)//发起请求
+                .subscribeOn(Schedulers.io())//在IO线程进行网络请求
+                .observeOn(AndroidSchedulers.mainThread())//回到主线程去处理请求注册结果
                 .subscribe(new Observer<WeatherEntity>() {
                     @Override
                     public void onCompleted() {
