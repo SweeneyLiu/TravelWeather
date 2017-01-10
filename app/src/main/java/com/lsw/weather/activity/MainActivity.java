@@ -23,6 +23,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationListener;
 import com.lsw.weather.R;
 import com.lsw.weather.adapter.DailyForecastAdapter;
 import com.lsw.weather.adapter.HourlyForecastAdapter;
@@ -86,12 +89,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.lv_suggestion)
     ScrollListView lvSuggestion;
 
+
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                if (aMapLocation != null) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //解析定位结果
+                        Log.d("sweeney-----",aMapLocation.getCity());
+                    }
+                }
+            }
+        });
+        //启动定位
+        mLocationClient.startLocation();
 
         swipeRefreshLayout.setRefreshing(true);
         loadWeatherData();
