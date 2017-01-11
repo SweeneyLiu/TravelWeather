@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
+    private String city = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (aMapLocation != null) {
                     if (aMapLocation.getErrorCode() == 0) {
                         //解析定位结果
+                        city = aMapLocation.getCity();
                         Log.d("sweeney-----",aMapLocation.getCity());
                     }
                 }
@@ -119,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         swipeRefreshLayout.setRefreshing(true);
         loadWeatherData();
-
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_orange, R.color.bg_blue, R.color.bg_green, R.color.bg_red);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -153,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
-
-        weatherApi.getWeather("beijing", HttpUtil.HE_WEATHER_KEY)//发起请求
+        collapsingToolbar.setTitle(city);
+        weatherApi.getWeather(city, HttpUtil.HE_WEATHER_KEY)//发起请求
                 .subscribeOn(Schedulers.io())//在IO线程进行网络请求
                 .observeOn(AndroidSchedulers.mainThread())//回到主线程去处理请求注册结果
                 .subscribe(new Observer<WeatherEntity>() {
