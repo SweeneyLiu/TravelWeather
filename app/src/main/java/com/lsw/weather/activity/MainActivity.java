@@ -1,11 +1,11 @@
 package com.lsw.weather.activity;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +24,8 @@ import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
 import com.lsw.weather.R;
 import com.lsw.weather.adapter.DailyForecastAdapter;
@@ -37,12 +38,10 @@ import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.util.ImageUtils;
 import com.lsw.weather.util.SnackbarUtils;
 import com.lsw.weather.view.ScrollListView;
+import com.yanzhenjie.permission.AndPermission;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -89,10 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.lv_suggestion)
     ScrollListView lvSuggestion;
 
-
+    private String cityName = "";
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
-    private String city = "";
+    //声明AMapLocationClientOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,24 +102,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(new AMapLocationListener() {
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-                if (aMapLocation != null) {
-                    if (aMapLocation.getErrorCode() == 0) {
-                        //解析定位结果
-                        city = aMapLocation.getCity();
-                        Log.d("sweeney-----",aMapLocation.getCity());
-                    }
-                }
-            }
-        });
-        //启动定位
-        mLocationClient.startLocation();
 
+        AndPermission.with(this)
+                .requestCode(100)
+                .permission(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)
+                .send();
+
+        onLocationCity();//设置定位参数
         swipeRefreshLayout.setRefreshing(true);
         loadWeatherData();
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_orange, R.color.bg_blue, R.color.bg_green, R.color.bg_red);
@@ -154,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
+        String city = cityName.equals("")?"北京":cityName;
         collapsingToolbar.setTitle(city);
         weatherApi.getWeather(city, HttpUtil.HE_WEATHER_KEY)//发起请求
                 .subscribeOn(Schedulers.io())//在IO线程进行网络请求
@@ -253,4 +248,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lvSuggestion.setAdapter(new SuggestionAdapter(weather.getSuggestion()));
     }
 
+
+    private void onLocationCity(){
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(new AMapLocationListener(){
+
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                if (aMapLocation != null) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //可在其中解析amapLocation获取相应内容。
+                        cityName = aMapLocation.getDistrict();
+                        Log.d("sweeney---", "onLocationChanged: city = "+cityName);
+                    }else {
+                        //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                        Log.e("AmapError","location Error, ErrCode:"
+                                + aMapLocation.getErrorCode() + ", errInfo:"
+                                + aMapLocation.getErrorInfo());
+                    }
+                }
+            }
+        });
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
+        //获取一次定位结果：
+        //该方法默认为false。
+        mLocationOption.setOnceLocation(true);
+        //获取最近3s内精度最高的一次定位结果：
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        mLocationOption.setOnceLocationLatest(true);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+    }
 }
