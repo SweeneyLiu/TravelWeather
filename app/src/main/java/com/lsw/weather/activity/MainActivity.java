@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ScrollListView lvSuggestion;
 
     private String cityName = "";
+
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
@@ -112,15 +113,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Manifest.permission.READ_PHONE_STATE)
                 .send();
 
-        onLocationCity();//设置定位参数
+        onLocationCity();
         swipeRefreshLayout.setRefreshing(true);
-        loadWeatherData();
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_orange, R.color.bg_blue, R.color.bg_green, R.color.bg_red);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                loadWeatherData();
+                loadWeatherData(cityName);
             }
         });
 
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
     }
 
-    private void loadWeatherData() {
+    private void loadWeatherData(String cityName) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HttpUtil.WEATHER_URL)
@@ -249,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    /**
+     * 定位城市
+     */
     private void onLocationCity(){
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
@@ -261,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
                         cityName = aMapLocation.getDistrict();
+                        loadWeatherData(cityName);
                         Log.d("sweeney---", "onLocationChanged: city = "+cityName);
                     }else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
