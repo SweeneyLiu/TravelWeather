@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
     }
 
-    private void loadWeatherData(String cityName) {
+    private void loadWeatherData(String city) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HttpUtil.WEATHER_URL)
@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);
-        String city = cityName.equals("")?"北京":cityName;
-        collapsingToolbar.setTitle(city);
         weatherApi.getWeather(city, HttpUtil.HE_WEATHER_KEY)//发起请求
                 .subscribeOn(Schedulers.io())//在IO线程进行网络请求
                 .observeOn(AndroidSchedulers.mainThread())//回到主线程去处理请求注册结果
@@ -264,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
                         cityName = aMapLocation.getDistrict();
+                        collapsingToolbar.setTitle(cityName);
                         loadWeatherData(cityName);
                         Log.d("sweeney---", "onLocationChanged: city = "+cityName);
                     }else {
