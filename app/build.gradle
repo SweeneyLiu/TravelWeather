@@ -37,4 +37,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile files('libs/AMap_Location_V3.2.1_20161228.jar')
     compile 'com.yanzhenjie:permission:1.0.4'
+    compile files('libs/com.baidu.tts_2.2.9.20161020_154fa02_release.jar')
+    compile files('libs/galaxy-v2.0.jar')
 }

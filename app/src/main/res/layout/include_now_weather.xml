@@ -12,11 +12,24 @@
         android:orientation="horizontal"
         android:padding="@dimen/activity_horizontal_margin">
 
-        <ImageView
-            android:id="@+id/iv_icon"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/ic_weather_icon_999" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_weather_icon_999" />
+            <TextView
+                android:id="@+id/tv_today_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/grey"
+                android:text="晴"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

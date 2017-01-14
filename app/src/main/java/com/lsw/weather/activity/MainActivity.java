@@ -1,6 +1,8 @@
 package com.lsw.weather.activity;
 
 import android.Manifest;
+import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -39,6 +41,8 @@ import com.lsw.weather.util.ImageUtils;
 import com.lsw.weather.util.SnackbarUtils;
 import com.lsw.weather.view.ScrollListView;
 import com.yanzhenjie.permission.AndPermission;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ScrollListView lvDailyForecast;
     @BindView(R.id.lv_suggestion)
     ScrollListView lvSuggestion;
+    @BindView(R.id.tv_today_weather)
+    TextView tvTodayWeather;
 
     private String cityName = "";
 
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
             }
         });
 
@@ -139,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * 网络加载天气数据
+     * @param city
+     */
     private void loadWeatherData(String city) {
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -167,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.d("sweeney---", "onNext: ");
                         swipeRefreshLayout.setRefreshing(false);
                         updateView(entity.getHeWeather().get(0));
-                        SnackbarUtils.Short(drawerLayout,"已更新至最新天气").show();
+                        SnackbarUtils.Short(drawerLayout, "已更新至最新天气").show();
                     }
                 });
     }
@@ -228,9 +239,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * 更新天气
+     * @param weather
+     */
     private void updateView(HeWeatherBean weather) {
         ivWeatherImage.setImageResource(ImageUtils.getWeatherImage(weather.getNow().getCond().getTxt()));
         ivIcon.setImageResource(ImageUtils.getIconByCode(this, weather.getNow().getCond().getCode()));
+        tvTodayWeather.setText(weather.getNow().getCond().getTxt());
         tvTemp.setText(getString(R.string.tempC, weather.getNow().getTmp()));
         tvMaxTemp.setText(getString(R.string.now_max_temp, weather.getDaily_forecast().get(0).getTmp().getMax()));
         tvMinTemp.setText(getString(R.string.now_min_temp, weather.getDaily_forecast().get(0).getTmp().getMin()));
@@ -250,24 +266,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * 定位城市
      */
-    private void onLocationCity(){
+    private void onLocationCity() {
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
-        mLocationClient.setLocationListener(new AMapLocationListener(){
+        mLocationClient.setLocationListener(new AMapLocationListener() {
 
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
                 if (aMapLocation != null) {
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
-                        cityName = getLocationCityName(aMapLocation.getProvince(),aMapLocation.getCity(),aMapLocation.getDistrict());
+                        cityName = getLocationCityName(aMapLocation.getProvince(), aMapLocation.getCity(), aMapLocation.getDistrict());
                         collapsingToolbar.setTitle(cityName);
                         loadWeatherData(cityName);
-                        Log.d("sweeney---", "onLocationChanged: city = "+cityName);
-                    }else {
+                        Log.d("sweeney---", "onLocationChanged: city = " + cityName);
+                    } else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                        Log.e("AmapError","location Error, ErrCode:"
+                        Log.e("AmapError", "location Error, ErrCode:"
                                 + aMapLocation.getErrorCode() + ", errInfo:"
                                 + aMapLocation.getErrorInfo());
                     }
@@ -290,6 +306,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLocationClient.startLocation();
     }
 
+    /**
+     * 获取显示天气的地区
+     * @param province
+     * @param city
+     * @param district
+     * @return
+     */
     private String getLocationCityName(String province, String city, String district) {
 
         //去掉district的"区"或"县"
@@ -305,20 +328,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 return district.substring(0, (district.length() - 1));
 
-            }else{
+            } else {
                 return district;
             }
-        }else if (city != null) {//去掉city的"市"
+        } else if (city != null) {//去掉city的"市"
 
             String cityEnd = city.substring((city.length() - 1), city.length());
             if (cityEnd.equals("市")) {
 
                 return city.substring(0, (city.length() - 1));
 
-            }else {
+            } else {
                 return city;
             }
-        }else if (province != null) {//去掉province的"省"或"市"
+        } else if (province != null) {//去掉province的"省"或"市"
 
             String provinceEnd = province.substring((province.length() - 1), province.length());
             if (provinceEnd.equals("省")) {
@@ -329,12 +352,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 return province.substring(0, (province.length() - 1));
 
-            }else{
+            } else {
                 return province;
             }
-        }else{
+        } else {
             return "北京";
         }
 
     }
+
+
+    /**
+     * 语音动画
+     * @param fab
+     * @param start
+     */
+    public static void voiceAnimation(FloatingActionButton fab, boolean start) {
+        AnimationDrawable animation = (AnimationDrawable) fab.getDrawable();
+        if (start) {
+            animation.start();
+        } else {
+            animation.stop();
+            animation.selectDrawable(animation.getNumberOfFrames() - 1);
+        }
+    }
+
+    /**
+     * 语音播报内容
+     * @param context
+     * @param weather
+     * @return
+     */
+    public static String voiceText(Context context, HeWeatherBean weather) {
+        StringBuilder sb = new StringBuilder();
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if (hour >= 7 && hour < 12) {
+            sb.append("上午好");
+        } else if (hour < 19) {
+            sb.append("下午好");
+        } else {
+            sb.append("晚上好");
+        }
+        sb.append("，");
+        sb.append(context.getString(R.string.app_name))
+                .append("为您播报")
+                .append("，");
+        sb.append("今天白天到夜间")
+                .append(weather.getDaily_forecast().get(0).getCond().getTxt_d())
+                .append("转")
+                .append(weather.getDaily_forecast().get(0).getCond().getTxt_n())
+                .append("，");
+        sb.append("温度")
+                .append(weather.getDaily_forecast().get(0).getTmp().getMin())
+                .append("~")
+                .append(weather.getDaily_forecast().get(0).getTmp().getMax())
+                .append("℃")
+                .append("，");
+        sb.append(weather.getDaily_forecast().get(0).getWind().getDir())
+                .append(weather.getDaily_forecast().get(0).getWind().getSc())
+                .append(weather.getDaily_forecast().get(0).getWind().getSc().contains("风") ? "" : "级")
+                .append("。");
+        return sb.toString();
+    }
+
 }
