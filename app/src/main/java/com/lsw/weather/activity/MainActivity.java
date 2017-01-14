@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (aMapLocation != null) {
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
-                        cityName = aMapLocation.getDistrict();
+                        cityName = getLocationCityName(aMapLocation.getProvince(),aMapLocation.getCity(),aMapLocation.getDistrict());
                         collapsingToolbar.setTitle(cityName);
                         loadWeatherData(cityName);
                         Log.d("sweeney---", "onLocationChanged: city = "+cityName);
@@ -288,5 +288,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
         mLocationClient.startLocation();
+    }
+
+    private String getLocationCityName(String province, String city, String district) {
+
+        //去掉district的"区"或"县"
+        if (district != null) {
+
+            String districtEnd = district.substring((district.length() - 1), district.length());//去最后的字符
+
+            if (districtEnd.equals("区")) {
+
+                return district.substring(0, (district.length() - 1));
+
+            } else if (districtEnd.equals("县")) {
+
+                return district.substring(0, (district.length() - 1));
+
+            }else{
+                return district;
+            }
+        }else if (city != null) {//去掉city的"市"
+
+            String cityEnd = city.substring((city.length() - 1), city.length());
+            if (cityEnd.equals("市")) {
+
+                return city.substring(0, (city.length() - 1));
+
+            }else {
+                return city;
+            }
+        }else if (province != null) {//去掉province的"省"或"市"
+
+            String provinceEnd = province.substring((province.length() - 1), province.length());
+            if (provinceEnd.equals("省")) {
+
+                return province.substring(0, (province.length() - 1));
+
+            } else if (provinceEnd.equals("市")) {
+
+                return province.substring(0, (province.length() - 1));
+
+            }else{
+                return province;
+            }
+        }else{
+            return "北京";
+        }
+
     }
 }
