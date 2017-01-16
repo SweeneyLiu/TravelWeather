@@ -1,6 +1,7 @@
 package com.lsw.weather.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -95,11 +96,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView tvTodayWeather;
 
     private String cityName = "";
-
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
+    private HeWeatherBean mHeWeatherBean;
 
 
     @Override
@@ -134,6 +135,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (mHeWeatherBean != null) {
+                    voiceWeather(MainActivity.this, mHeWeatherBean);
+                }
 
             }
         });
@@ -177,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onNext(WeatherEntity entity) {
                         Log.d("sweeney---", "onNext: ");
                         swipeRefreshLayout.setRefreshing(false);
-                        updateView(entity.getHeWeather().get(0));
+                        mHeWeatherBean = entity.getHeWeather().get(0);
+                        updateView(mHeWeatherBean);
                         SnackbarUtils.Short(drawerLayout, "已更新至最新天气").show();
                     }
                 });
@@ -383,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param weather
      * @return
      */
-    public static String voiceText(Context context, HeWeatherBean weather) {
+    public static String voiceWeather(Context context, HeWeatherBean weather) {
         StringBuilder sb = new StringBuilder();
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         if (hour >= 7 && hour < 12) {
