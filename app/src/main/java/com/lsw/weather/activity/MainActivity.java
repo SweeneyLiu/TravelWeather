@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,6 +31,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
+import com.baidu.tts.client.SpeechSynthesizer;
+import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.lsw.weather.R;
 import com.lsw.weather.adapter.DailyForecastAdapter;
 import com.lsw.weather.adapter.HourlyForecastAdapter;
@@ -102,6 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public AMapLocationClientOption mLocationOption = null;
     private HeWeatherBean mHeWeatherBean;
 
+    private SpeechSynthesizer mSpeechSynthesizer;
+    private SpeechSynthesizerListener mSpeechSynthesizerListener;
+    private static final String APP_ID = "9204443";
+    private static final String API_KEY = "LhS9kXyayGYZwrMY4lQ1Sh2F";
+    private static final String SECRET_KEY = "db5b9a8f0403a921d1226673dffd0113";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +144,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 if (mHeWeatherBean != null) {
-                    voiceWeather(MainActivity.this, mHeWeatherBean);
+                    mSpeechSynthesizer = SpeechSynthesizer.getInstance();
+                    mSpeechSynthesizer.setContext(MainActivity.this);
+                    mSpeechSynthesizer.setAppId(APP_ID);
+                    mSpeechSynthesizer.setApiKey(API_KEY, SECRET_KEY);
+                    mSpeechSynthesizer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    String text = voiceWeather(MainActivity.this, mHeWeatherBean);
+                    mSpeechSynthesizer.speak(text);
+
                 }
 
             }
