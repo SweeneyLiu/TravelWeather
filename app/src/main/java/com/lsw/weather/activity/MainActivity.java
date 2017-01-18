@@ -47,6 +47,7 @@ import com.lsw.weather.model.WeatherEntity.HeWeatherBean;
 import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.util.ImageUtils;
 import com.lsw.weather.util.SnackbarUtils;
+import com.lsw.weather.util.SpeechUtil;
 import com.lsw.weather.view.ScrollListView;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String API_KEY = "LhS9kXyayGYZwrMY4lQ1Sh2F";
     private static final String SECRET_KEY = "db5b9a8f0403a921d1226673dffd0113";
 
+    private SpeechUtil speechUtil;
 
     private String mSampleDirPath;
     private static final String SAMPLE_DIR_NAME = "baiduTTS";
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        initialEnv();
 //        initialTts();
+//        speechUtil = new SpeechUtil(this);
         voiceAnimation(fabSpeech,false);
 
         onLocationCity();
@@ -175,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mSpeechSynthesizer.setApiKey(API_KEY, SECRET_KEY);
                     mSpeechSynthesizer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     String text = voiceWeather(MainActivity.this, mHeWeatherBean);
+//                    speechUtil.speak(text);
                     mSpeechSynthesizer.speak(text);
 
                 }
