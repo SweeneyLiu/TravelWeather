@@ -91,36 +91,36 @@ public class SpeechUtil implements SpeechSynthesizerListener {
 
     @Override
     public void onSynthesizeStart(String s) {
-
+        Log.i(TAG, "onSynthesizeStart:" + s);
     }
 
     @Override
     public void onSynthesizeDataArrived(String s, byte[] bytes, int i) {
-
+        Log.i(TAG, "onSynthesizeDataArrived:"+"s = " + s + ";bytes = " + bytes + ";i = " + i);
     }
 
     @Override
     public void onSynthesizeFinish(String s) {
-
+        Log.i(TAG, "onSynthesizeFinish:" + s);
     }
 
     @Override
     public void onSpeechStart(String s) {
-
+        Log.i(TAG, "onSpeechStart:" + s);
     }
 
     @Override
     public void onSpeechProgressChanged(String s, int i) {
-
+        Log.i(TAG, "onSpeechProgressChanged:" + s + ";i = " + i);
     }
 
     @Override
     public void onSpeechFinish(String s) {
-
+        Log.i(TAG, "onSpeechFinish:" + s);
     }
 
     @Override
     public void onError(String s, SpeechError error) {
-
+        Log.i(TAG, "onSynthesizeStart:" + s + ";error = " + error.toString());
     }
 }
