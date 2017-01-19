@@ -134,9 +134,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Manifest.permission.READ_PHONE_STATE)
                 .send();
 
-
-        speechUtil = new SpeechUtil(this);
-        voiceAnimation(fabSpeech,false);
+        AnimationDrawable animation = (AnimationDrawable) fabSpeech.getDrawable();
+        speechUtil = new SpeechUtil(this,animation);
 
         onLocationCity();
         swipeRefreshLayout.setRefreshing(true);
@@ -153,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 if (mHeWeatherBean != null) {
-                    voiceAnimation(fabSpeech,true);
                     String text = voiceWeather(MainActivity.this, mHeWeatherBean);
                     speechUtil.speak(text);
                 }
@@ -383,21 +381,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return "北京";
         }
 
-    }
-
-    /**
-     * 语音动画
-     * @param fab
-     * @param start
-     */
-    public static void voiceAnimation(FloatingActionButton fab, boolean start) {
-        AnimationDrawable animation = (AnimationDrawable) fab.getDrawable();
-        if (start) {
-            animation.start();
-        } else {
-            animation.stop();
-            animation.selectDrawable(animation.getNumberOfFrames() - 1);
-        }
     }
 
     /**

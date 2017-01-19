@@ -1,6 +1,7 @@
 package com.lsw.weather.util;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.util.Log;
 
@@ -22,9 +23,11 @@ public class SpeechUtil implements SpeechSynthesizerListener {
     private Context mContext;
     private SpeechSynthesizer mSpeechSynthesizer;
     private static final String TAG = "SpeechUtil";
+    private AnimationDrawable animationDrawable;
 
-    public SpeechUtil(Context context) {
+    public SpeechUtil(Context context,AnimationDrawable animationDrawable) {
         mContext = context;
+        this.animationDrawable = animationDrawable;
         initialTts();
     }
 
@@ -107,6 +110,7 @@ public class SpeechUtil implements SpeechSynthesizerListener {
     @Override
     public void onSpeechStart(String s) {
         Log.i(TAG, "onSpeechStart:" + s);
+        animationDrawable.start();
     }
 
     @Override
@@ -117,6 +121,8 @@ public class SpeechUtil implements SpeechSynthesizerListener {
     @Override
     public void onSpeechFinish(String s) {
         Log.i(TAG, "onSpeechFinish:" + s);
+        animationDrawable.stop();
+        animationDrawable.selectDrawable(animationDrawable.getNumberOfFrames() - 1);
     }
 
     @Override
