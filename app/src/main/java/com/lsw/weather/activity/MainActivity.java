@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 if (mHeWeatherBean != null) {
+                    voiceAnimation(fabSpeech,true);
                     String text = voiceWeather(MainActivity.this, mHeWeatherBean);
                     speechUtil.speak(text);
                 }
