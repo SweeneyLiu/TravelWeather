@@ -1,12 +1,9 @@
 package com.lsw.weather.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -32,11 +29,6 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
-import com.baidu.tts.auth.AuthInfo;
-import com.baidu.tts.client.SpeechError;
-import com.baidu.tts.client.SpeechSynthesizer;
-import com.baidu.tts.client.SpeechSynthesizerListener;
-import com.baidu.tts.client.TtsMode;
 import com.lsw.weather.R;
 import com.lsw.weather.adapter.DailyForecastAdapter;
 import com.lsw.weather.adapter.HourlyForecastAdapter;
@@ -51,11 +43,6 @@ import com.lsw.weather.util.SpeechUtil;
 import com.lsw.weather.view.ScrollListView;
 import com.yanzhenjie.permission.AndPermission;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -135,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .send();
 
         AnimationDrawable animation = (AnimationDrawable) fabSpeech.getDrawable();
-        speechUtil = new SpeechUtil(this,animation);
+        speechUtil = new SpeechUtil(this, animation);
 
         onLocationCity();
         swipeRefreshLayout.setRefreshing(true);
@@ -169,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * 网络加载天气数据
+     *
      * @param city
      */
     private void loadWeatherData(String city) {
@@ -263,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * 更新天气
+     *
      * @param weather
      */
     private void updateView(HeWeatherBean weather) {
@@ -330,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * 获取显示天气的地区
+     *
      * @param province
      * @param city
      * @param district
@@ -385,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * 语音播报内容
+     *
      * @param context
      * @param weather
      * @return
