@@ -14,8 +14,8 @@
 
     <string name="image_weather">实景天气</string>
     <string name="manage_city">城市管理</string>
-    <string name="setting">功能设置</string>
-    <string name="share">推荐给朋友</string>
+    <string name="setting">设置</string>
+    <string name="share">分享</string>
     <string name="about">关于</string>
 
     <string name="action_settings">Settings</string>

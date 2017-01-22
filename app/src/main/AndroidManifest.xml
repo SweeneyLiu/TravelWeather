@@ -47,6 +47,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.ManageCityActivity"
+            android:label="@string/manage_city"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
