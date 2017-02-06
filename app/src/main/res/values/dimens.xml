@@ -6,4 +6,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="common_dimen_mid">12dp</dimen>
+    <dimen name="setting_text_height">48dp</dimen>
+    <dimen name="divider_height">1px</dimen>
+    <dimen name="common_dimen_big">16dp</dimen>
+    <dimen name="common_dimen">10dp</dimen>
+    <dimen name="common_dimen_huge">20dp</dimen>
 </resources>

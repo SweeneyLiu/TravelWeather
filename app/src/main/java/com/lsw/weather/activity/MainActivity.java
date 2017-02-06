@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,7 +54,7 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.iv_weather_image)
     ImageView ivWeatherImage;
@@ -237,7 +236,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.action_share) {
 
         } else if (id == R.id.action_about) {
-
+            Intent intent = new Intent(MainActivity.this,AboutActivity.class);
+            startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -266,6 +266,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lvHourlyForecast.setAdapter(new HourlyForecastAdapter(weather.getHourly_forecast()));
         lvDailyForecast.setAdapter(new DailyForecastAdapter(weather.getDaily_forecast()));
         lvSuggestion.setAdapter(new SuggestionAdapter(weather.getSuggestion()));
+
+        collapsingToolbar.setTitle(cityName);
     }
 
 
@@ -284,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
                         cityName = getLocationCityName(aMapLocation.getProvince(), aMapLocation.getCity(), aMapLocation.getDistrict());
-                        collapsingToolbar.setTitle(cityName);
+//                        collapsingToolbar.setTitle(cityName);
                         loadWeatherData(cityName);
                         Log.d("sweeney---", "onLocationChanged: city = " + cityName);
                     } else {
