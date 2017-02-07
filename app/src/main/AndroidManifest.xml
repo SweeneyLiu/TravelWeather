@@ -28,19 +28,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- 家里电脑key -->
-        <service android:name="com.amap.api.location.APSService" />
 
-        <meta-data
+        <service android:name="com.amap.api.location.APSService" />
+        <!-- 家里电脑key -->
+       <!-- <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="27e57ee92488239f870a42916bd3a4e6" />
+            android:value="27e57ee92488239f870a42916bd3a4e6" />-->
         <!-- 公司电脑key -->
-        <!-- <meta-data android:name="com.amap.api.v2.apikey" -->
-        <!-- android:value="9e319d6eb5c8c6340540518e19d848bd"/> -->
+         <meta-data android:name="com.amap.api.v2.apikey"
+         android:value="9e319d6eb5c8c6340540518e19d848bd"/>
 
         <activity
-            android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,8 +52,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AboutActivity"
-            android:label="@string/title_activity_abort"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_abort"/>
         <activity android:name=".activity.BaseActivity"></activity>
     </application>
 
