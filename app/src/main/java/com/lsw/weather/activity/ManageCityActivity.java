@@ -14,14 +14,6 @@ import butterknife.ButterKnife;
 
 public class ManageCityActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.rv_city)
-    RecyclerView rvCity;
-    @BindView(R.id.fab_add)
-    FloatingActionButton fabAdd;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
