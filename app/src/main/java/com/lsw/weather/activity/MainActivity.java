@@ -234,7 +234,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (id == R.id.action_manage_city) {
             startActivityForResult(new Intent(this, ManageCityActivity.class), 1);
         } else if (id == R.id.action_share) {
-
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_content));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(Intent.createChooser(intent, getString(R.string.share)));
         } else if (id == R.id.action_about) {
             Intent intent = new Intent(MainActivity.this,AboutActivity.class);
             startActivity(intent);
