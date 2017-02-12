@@ -95,6 +95,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.tv_today_weather)
     TextView tvTodayWeather;
 
+    private static final String TAG = "MainActivity";
     private String cityName = "";
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
@@ -174,17 +175,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .subscribe(new Observer<WeatherEntity>() {
                     @Override
                     public void onCompleted() {
-                        Log.d("sweeney---", "onCompleted: ");
+                        Log.d(TAG, "onCompleted: ");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("sweeney---", "onError: " + e.getMessage());
+                        Log.d(TAG, "onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onNext(WeatherEntity entity) {
-                        Log.d("sweeney---", "onNext: ");
+                        Log.d(TAG, "onNext: ");
                         swipeRefreshLayout.setRefreshing(false);
                         mHeWeatherBean = entity.getHeWeather().get(0);
                         updateView(mHeWeatherBean);
@@ -292,12 +293,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         cityName = getLocationCityName(aMapLocation.getProvince(), aMapLocation.getCity(), aMapLocation.getDistrict());
 //                        collapsingToolbar.setTitle(cityName);
                         loadWeatherData(cityName);
-                        Log.d("sweeney---", "onLocationChanged: city = " + cityName);
+                        Log.d(TAG, "onLocationChanged: city = " + cityName);
                     } else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                        Log.e("AmapError", "location Error, ErrCode:"
-                                + aMapLocation.getErrorCode() + ", errInfo:"
-                                + aMapLocation.getErrorInfo());
+                        Log.e(TAG, "onLocationChanged: " + aMapLocation.getErrorCode() + ",errInfo:" + aMapLocation.getErrorInfo());
                     }
                 }
             }
