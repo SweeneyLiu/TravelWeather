@@ -42,6 +42,7 @@ import com.lsw.weather.util.SnackbarUtils;
 import com.lsw.weather.util.SpeechUtil;
 import com.lsw.weather.view.ScrollListView;
 import com.yanzhenjie.permission.AndPermission;
+import com.zaaach.citypicker.CityPickerActivity;
 
 import java.util.Calendar;
 
@@ -96,6 +97,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     TextView tvTodayWeather;
 
     private static final String TAG = "MainActivity";
+    private static final int REQUEST_CODE_PICK_CITY = 0;
     private String cityName = "";
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
@@ -195,6 +197,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PICK_CITY && resultCode == RESULT_OK){
+            if (data != null){
+                cityName = data.getStringExtra(CityPickerActivity.KEY_PICKED_CITY);
+                swipeRefreshLayout.setRefreshing(true);
+                loadWeatherData(cityName);
+            }
+        }
+    }
+
+    @Override
     public void onBackPressed() {
 
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -216,14 +229,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+       /* int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                startActivityForResult(new Intent(MainActivity.this, CityPickerActivity.class), REQUEST_CODE_PICK_CITY);
+                break;
+            case R.id.action_settings:
 
-        return super.onOptionsItemSelected(item);
+                break;
+            default:
+        }
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
