@@ -31,12 +31,12 @@
 
         <service android:name="com.amap.api.location.APSService" />
         <!-- 家里电脑key -->
-        <meta-data
+<!--        <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="27e57ee92488239f870a42916bd3a4e6" />
+            android:value="27e57ee92488239f870a42916bd3a4e6" />-->
         <!-- 公司电脑key -->
-        <!-- <meta-data android:name="com.amap.api.v2.apikey"
-         android:value="9e319d6eb5c8c6340540518e19d848bd"/>-->
+         <meta-data android:name="com.amap.api.v2.apikey"
+         android:value="9e319d6eb5c8c6340540518e19d848bd"/>
 
         <activity
             android:name=".activity.MainActivity">
