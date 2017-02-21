@@ -21,4 +21,13 @@
     <string name="share_content">我正在使用@出行天气，可以随时随地查看天气信息，是您出差、旅行的贴心助手！推荐你也试试：http://fir.im/travelweather</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_abort">AbortActivity</string>
+
+    <string name="cp_select_city">选择城市</string>
+    <string name="cp_hot_city">热门城市</string>
+    <string name="cp_located_city">定位城市</string>
+    <string name="cp_hint_search_box">请输入城市名或拼音</string>
+    <string name="cp_nothing_found">没有搜索结果~</string>
+    <string name="cp_locating">正在定位…</string>
+    <string name="cp_located_failed">定位失败</string>
+
 </resources>

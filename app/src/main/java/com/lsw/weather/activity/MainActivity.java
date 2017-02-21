@@ -42,7 +42,6 @@ import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.util.ImageUtils;
 import com.lsw.weather.util.SpeechUtil;
 import com.lsw.weather.view.ScrollListView;
-import com.zaaach.citypicker.CityPickerActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
