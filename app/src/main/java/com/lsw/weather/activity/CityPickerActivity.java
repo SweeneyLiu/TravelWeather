@@ -3,9 +3,11 @@ package com.lsw.weather.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,7 +40,7 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     private SideLetterBar mLetterBar;
     private EditText searchBox;
     private ImageView clearBtn;
-    private ImageView backBtn;
+//    private ImageView backBtn;
     private ViewGroup emptyView;
 
     private CityListAdapter mCityAdapter;
@@ -52,6 +54,12 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cp_activity_city_list);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar()!= null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.cp_select_city);
+        }
 
         initData();
         initView();
@@ -159,10 +167,10 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
         });
 
         clearBtn = (ImageView) findViewById(R.id.iv_search_clear);
-        backBtn = (ImageView) findViewById(R.id.back);
+//        backBtn = (ImageView) findViewById(R.id.back);
 
         clearBtn.setOnClickListener(this);
-        backBtn.setOnClickListener(this);
+//        backBtn.setOnClickListener(this);
     }
 
     private void back(String city){
@@ -180,15 +188,26 @@ public class CityPickerActivity extends AppCompatActivity implements View.OnClic
             clearBtn.setVisibility(View.GONE);
             emptyView.setVisibility(View.GONE);
             mResultListView.setVisibility(View.GONE);
-        } else if (i == R.id.back) {
+        }/* else if (i == R.id.back) {
             finish();
 
-        }
+        }*/
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mLocationClient.stopLocation();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
