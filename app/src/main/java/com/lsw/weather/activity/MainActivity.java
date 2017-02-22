@@ -3,9 +3,11 @@ package com.lsw.weather.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -31,6 +33,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lsw.weather.R;
 import com.lsw.weather.adapter.DailyForecastAdapter;
 import com.lsw.weather.adapter.HourlyForecastAdapter;
@@ -42,6 +46,9 @@ import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.util.ImageUtils;
 import com.lsw.weather.util.SpeechUtil;
 import com.lsw.weather.view.ScrollListView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,6 +124,8 @@ public class MainActivity extends BaseActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         }
 
+        nestedScrollView.setVisibility(View.GONE);
+
         //权限判断,5个危险权限属于3个权限组
         List<String> permissionList = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -128,18 +137,17 @@ public class MainActivity extends BaseActivity {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+
         if (!permissionList.isEmpty()) {
             String[] permissions = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, REQUEST_CODE_PERMISSION);
         } else {
-            onLocationCity();
+            showWeather();
         }
 
         AnimationDrawable animation = (AnimationDrawable) fabSpeech.getDrawable();
         speechUtil = new SpeechUtil(this, animation);
 
-//        onLocationCity();
-        swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_orange, R.color.bg_blue, R.color.bg_green, R.color.bg_red);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -162,6 +170,22 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private void showWeather() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String weatherStr = prefs.getString("weather", null);
+        if (weatherStr != null) {
+            // 有缓存时直接解析天气数据
+            Gson gson=new Gson();
+            WeatherEntity entity = gson.fromJson(weatherStr, new TypeToken<WeatherEntity>(){}.getType());
+            HeWeatherBean weather = entity.getHeWeather().get(0);
+            updateView(weather);
+        } else {
+            // 无缓存时去服务器查询天气
+            swipeRefreshLayout.setRefreshing(true);
+            onLocationCity();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -174,7 +198,7 @@ public class MainActivity extends BaseActivity {
                             return;
                         }
                     }
-                    onLocationCity();
+                    showWeather();
                 } else {
                     Toast.makeText(this, "发生未知错误", Toast.LENGTH_SHORT).show();
                 }
@@ -214,7 +238,11 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onNext(WeatherEntity entity) {
                         Log.d(TAG, "onNext: ");
-                        swipeRefreshLayout.setRefreshing(false);
+                        Gson gson = new Gson();
+                        String weatherStr = gson.toJson(entity);
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+                        editor.putString("weather", weatherStr);
+                        editor.apply();
                         mHeWeatherBean = entity.getHeWeather().get(0);
                         updateView(mHeWeatherBean);
                         Snackbar.make(toolbar,"已更新至最新天气",Snackbar.LENGTH_SHORT).show();
@@ -286,7 +314,11 @@ public class MainActivity extends BaseActivity {
         lvDailyForecast.setAdapter(new DailyForecastAdapter(weather.getDaily_forecast()));
         lvSuggestion.setAdapter(new SuggestionAdapter(weather.getSuggestion()));
 
-        collapsingToolbar.setTitle(cityName);
+        collapsingToolbar.setTitle(weather.getBasic().getCity());
+        cityName = weather.getBasic().getCity();
+
+        nestedScrollView.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
 
