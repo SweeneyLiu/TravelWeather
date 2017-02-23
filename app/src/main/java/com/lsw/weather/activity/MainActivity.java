@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE_PICK_CITY = 0;
-    private String cityName = "";
+    private String cityName = "北京";
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
@@ -374,7 +374,7 @@ public class MainActivity extends BaseActivity {
     private String getLocationCityName(String province, String city, String district) {
 
         //去掉district的"区"或"县"
-        if (district != null) {
+    /*    if (district != null) {
 
             String districtEnd = district.substring((district.length() - 1), district.length());//去最后的字符
 
@@ -389,7 +389,7 @@ public class MainActivity extends BaseActivity {
             } else {
                 return district;
             }
-        } else if (city != null) {//去掉city的"市"
+        } else*/ if (city != null) {//去掉city的"市"
 
             String cityEnd = city.substring((city.length() - 1), city.length());
             if (cityEnd.equals("市")) {
