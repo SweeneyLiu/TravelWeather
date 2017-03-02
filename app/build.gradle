@@ -18,6 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    freeline {
+        hack true
+        autoDependency false
+    }
+
 }
 
 dependencies {
@@ -39,4 +45,13 @@ dependencies {
     compile files('libs/AMap_Location_V3.2.1_20161228.jar')
     compile files('libs/com.baidu.tts_2.2.9.20161020_154fa02_release.jar')
     compile files('libs/galaxy-v2.0.jar')
+
+    debugCompile 'com.antfortune.freeline:runtime:0.8.6'
+    releaseCompile 'com.antfortune.freeline:runtime-no-op:0.8.6'
+    testCompile 'com.antfortune.freeline:runtime-no-op:0.8.6'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
 }
