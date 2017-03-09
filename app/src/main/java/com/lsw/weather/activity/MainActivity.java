@@ -42,6 +42,7 @@ import com.lsw.weather.adapter.SuggestionAdapter;
 import com.lsw.weather.api.WeatherApi;
 import com.lsw.weather.model.WeatherEntity;
 import com.lsw.weather.model.WeatherEntity.HeWeatherBean;
+import com.lsw.weather.util.ACache;
 import com.lsw.weather.util.HttpUtil;
 import com.lsw.weather.util.ImageUtils;
 import com.lsw.weather.util.SpeechUtil;
@@ -112,6 +113,8 @@ public class MainActivity extends BaseActivity {
     private SpeechUtil speechUtil;
     private static final int REQUEST_CODE_PERMISSION = 100;
 
+    private ACache mACache;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +128,8 @@ public class MainActivity extends BaseActivity {
         }
 
         nestedScrollView.setVisibility(View.GONE);
+
+        mACache = ACache.get(this);
 
         //权限判断,5个危险权限属于3个权限组
         List<String> permissionList = new ArrayList<>();
@@ -171,8 +176,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showWeather() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String weatherStr = prefs.getString("weather", null);
+/*        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String weatherStr = prefs.getString("weather", null);*/
+        String weatherStr = mACache.getAsString("weather");
         if (weatherStr != null) {
             // 有缓存时直接解析天气数据
             Gson gson=new Gson();
@@ -240,9 +246,10 @@ public class MainActivity extends BaseActivity {
                         Log.d(TAG, "onNext: ");
                         Gson gson = new Gson();
                         String weatherStr = gson.toJson(entity);
-                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+                        /*SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
                         editor.putString("weather", weatherStr);
-                        editor.apply();
+                        editor.apply();*/
+                        mACache.put("weather", weatherStr);
                         mHeWeatherBean = entity.getHeWeather().get(0);
                         updateView(mHeWeatherBean);
                         Snackbar.make(toolbar,"已更新至最新天气",Snackbar.LENGTH_SHORT).show();
