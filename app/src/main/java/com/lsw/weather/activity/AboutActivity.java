@@ -59,6 +59,8 @@ public class AboutActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.suggestion:
+                Intent intent = new Intent(AboutActivity.this,ContactActivity.class);
+                startActivity(intent);
                 break;
             case R.id.new_version:
                 break;
