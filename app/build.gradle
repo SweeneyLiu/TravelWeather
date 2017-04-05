@@ -13,7 +13,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
+/*    signingConfigs {
         config {
             storeFile file(KEY_PATH)
             storePassword KAY_PASS
@@ -21,7 +21,7 @@ android {
             keyPassword ALIAS_PASS
         }
 
-    }
+    }*/
 
     buildTypes {
         release {
@@ -32,7 +32,7 @@ android {
             //zip对齐优化
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
     }
 
@@ -50,16 +50,22 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
+
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
+
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'io.reactivex:rxandroid:1.2.1'
+
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+
     compile files('libs/AMap_Location_V3.2.1_20161228.jar')
+
     compile files('libs/com.baidu.tts_2.2.9.20161020_154fa02_release.jar')
     compile files('libs/galaxy-v2.0.jar')
 

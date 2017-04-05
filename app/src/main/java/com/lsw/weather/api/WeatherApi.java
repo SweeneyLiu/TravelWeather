@@ -2,10 +2,10 @@ package com.lsw.weather.api;
 
 import com.lsw.weather.model.WeatherEntity;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 
 public interface WeatherApi {

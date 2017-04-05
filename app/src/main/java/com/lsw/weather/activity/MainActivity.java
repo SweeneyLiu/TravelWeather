@@ -57,12 +57,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
 
@@ -232,8 +233,22 @@ public class MainActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())//回到主线程去处理请求注册结果
                 .subscribe(new Observer<WeatherEntity>() {
                     @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "onSubscribe: ");
+                    }
+
+                    @Override
+                    public void onNext(WeatherEntity value) {
+                        Log.d(TAG, "onNext: ");
+                        Gson gson = new Gson();
+                        String weatherStr = gson.toJson(value);
+                        /*SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+                        editor.putString("weather", weatherStr);
+                        editor.apply();*/
+                        mACache.put("weather", weatherStr);
+                        mHeWeatherBean = value.getHeWeather().get(0);
+                        updateView(mHeWeatherBean);
+                        Snackbar.make(toolbar,"已更新至最新天气",Snackbar.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -242,17 +257,8 @@ public class MainActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(WeatherEntity entity) {
-                        Log.d(TAG, "onNext: ");
-                        Gson gson = new Gson();
-                        String weatherStr = gson.toJson(entity);
-                        /*SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
-                        editor.putString("weather", weatherStr);
-                        editor.apply();*/
-                        mACache.put("weather", weatherStr);
-                        mHeWeatherBean = entity.getHeWeather().get(0);
-                        updateView(mHeWeatherBean);
-                        Snackbar.make(toolbar,"已更新至最新天气",Snackbar.LENGTH_SHORT).show();
+                    public void onComplete() {
+                        Log.d(TAG, "onCompleted: ");
                     }
                 });
     }
