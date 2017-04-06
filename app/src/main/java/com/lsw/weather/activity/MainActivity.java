@@ -62,7 +62,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends BaseActivity {
@@ -224,7 +224,7 @@ public class MainActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HttpUtil.WEATHER_URL)
                 .addConverterFactory(GsonConverterFactory.create())//添加 json 转换器
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())//添加 RxJava 适配器
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//添加 RxJava 适配器
                 .build();
 
         WeatherApi weatherApi = retrofit.create(WeatherApi.class);

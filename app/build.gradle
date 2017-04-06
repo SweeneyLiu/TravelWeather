@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.antfortune.freeline'
 
 android {
     compileSdkVersion 24
@@ -13,7 +12,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-/*    signingConfigs {
+    signingConfigs {
         config {
             storeFile file(KEY_PATH)
             storePassword KAY_PASS
@@ -21,7 +20,7 @@ android {
             keyPassword ALIAS_PASS
         }
 
-    }*/
+    }
 
     buildTypes {
         release {
@@ -32,13 +31,8 @@ android {
             //zip对齐优化
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
         }
-    }
-
-    freeline {
-        hack true
-        autoDependency false
     }
 
 }
@@ -57,21 +51,17 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
 
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
 
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
 
     compile files('libs/AMap_Location_V3.2.1_20161228.jar')
 
     compile files('libs/com.baidu.tts_2.2.9.20161020_154fa02_release.jar')
     compile files('libs/galaxy-v2.0.jar')
-
-    debugCompile 'com.antfortune.freeline:runtime:0.8.6'
-    releaseCompile 'com.antfortune.freeline:runtime-no-op:0.8.6'
-    testCompile 'com.antfortune.freeline:runtime-no-op:0.8.6'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'

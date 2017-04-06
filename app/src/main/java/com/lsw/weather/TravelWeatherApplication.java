@@ -3,7 +3,6 @@ package com.lsw.weather;
 import android.app.Application;
 import android.content.Context;
 
-import com.antfortune.freeline.FreelineCore;
 import com.squareup.leakcanary.LeakCanary;
 
 public class TravelWeatherApplication extends Application {
@@ -18,7 +17,6 @@ public class TravelWeatherApplication extends Application {
             return;
         }
         LeakCanary.install(this);
-        FreelineCore.init(this);
     }
 
     public static Context getContext(){
