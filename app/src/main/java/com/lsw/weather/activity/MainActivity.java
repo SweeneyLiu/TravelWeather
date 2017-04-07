@@ -57,6 +57,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.hugeterry.updatefun.UpdateFunGO;
+import cn.hugeterry.updatefun.config.UpdateKey;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -174,6 +176,31 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+
+
+        //下载方式:
+        //通过Dialog来进行下载
+//        UpdateKey.DialogOrNotification=UpdateKey.WITH_DIALOG;
+        //通过通知栏来进行下载(默认)
+//        UpdateKey.DialogOrNotification=UpdateKey.WITH_NOTIFITION;
+//        UpdateFunGO.init(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        UpdateFunGO.onResume(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        UpdateFunGO.onStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void showWeather() {

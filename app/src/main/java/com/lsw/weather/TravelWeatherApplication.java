@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 
+import cn.hugeterry.updatefun.config.UpdateKey;
+
 public class TravelWeatherApplication extends Application {
 
     private static Context context;
@@ -17,6 +19,8 @@ public class TravelWeatherApplication extends Application {
             return;
         }
         LeakCanary.install(this);
+        UpdateKey.API_TOKEN = "b109dacaa1b9a6adc83f5df86bd39fc3";
+        UpdateKey.APP_ID = "com.lsw.weather";
     }
 
     public static Context getContext(){

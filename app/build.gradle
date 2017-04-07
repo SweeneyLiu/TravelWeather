@@ -5,14 +5,14 @@ android {
     buildToolsVersion '24.0.2'
     defaultConfig {
         applicationId "com.lsw.weather"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
+    /*signingConfigs {
         config {
             storeFile file(KEY_PATH)
             storePassword KAY_PASS
@@ -20,18 +20,18 @@ android {
             keyPassword ALIAS_PASS
         }
 
-    }
+    }*/
 
     buildTypes {
         release {
             //打开混淆开关
-            minifyEnabled true
+//            minifyEnabled true
             //去除无用资源
-            shrinkResources true
+//            shrinkResources true
             //zip对齐优化
-            zipAlignEnabled true
+//            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
     }
 
@@ -66,5 +66,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    compile 'cn.hugeterry.updatefun:updatefun:1.9.0'
 
 }

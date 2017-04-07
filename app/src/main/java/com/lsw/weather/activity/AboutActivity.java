@@ -1,9 +1,12 @@
 package com.lsw.weather.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,9 +18,11 @@ import com.lsw.weather.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.hugeterry.updatefun.UpdateFunGO;
 
 public class AboutActivity extends BaseActivity {
 
+    private static final String TAG = "AboutActivity";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -42,6 +47,8 @@ public class AboutActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.about);
         }
+
+        version.setText("V "+getVersionName());
     }
 
     @Override
@@ -63,6 +70,7 @@ public class AboutActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.new_version:
+                UpdateFunGO.manualStart(this);
                 break;
             case R.id.favourable_comment:
                 openApplicationMarket();
@@ -70,6 +78,17 @@ public class AboutActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UpdateFunGO.onResume(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        UpdateFunGO.onStop(this);
+    }
 
     /**
      * 通过包名 在应用商店打开应用
@@ -99,6 +118,21 @@ public class AboutActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    private String getVersionName() {
+        // 获取packagemanager的实例
+        PackageManager packageManager = getPackageManager();
+        // getPackageName()是你当前类的包名，0代表是获取版本信息
+        PackageInfo packInfo = null;
+        String version = "";
+        try {
+            packInfo = packageManager.getPackageInfo(getPackageName(),0);
+            version = packInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
 
 }
