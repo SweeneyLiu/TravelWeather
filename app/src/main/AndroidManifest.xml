@@ -38,6 +38,10 @@
             android:name="com.amap.api.v2.apikey"
             android:value="9e319d6eb5c8c6340540518e19d848bd" />
 
+        <meta-data
+            android:name="BUG_HD_SDK_GENERAL_KEY"
+            android:value="4bcb0511613eabc2af0b2e72290b04e1" />
+
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/MainActivityTheme">
