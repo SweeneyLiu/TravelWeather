@@ -69,4 +69,6 @@ dependencies {
 
     compile 'cn.hugeterry.updatefun:updatefun:1.9.0'
 
+    compile 'im.fir:fir-sdk:latest.integration@aar'
+
 }
