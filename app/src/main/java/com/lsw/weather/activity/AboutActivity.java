@@ -14,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lsw.weather.R;
+import com.lsw.weather.util.CheckUpdateUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.hugeterry.updatefun.UpdateFunGO;
 
 public class AboutActivity extends BaseActivity {
 
@@ -70,7 +70,7 @@ public class AboutActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.new_version:
-                UpdateFunGO.manualStart(this);
+                CheckUpdateUtils.checkUpdate(AboutActivity.this);
                 break;
             case R.id.favourable_comment:
                 openApplicationMarket();
@@ -81,13 +81,11 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        UpdateFunGO.onResume(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        UpdateFunGO.onStop(this);
     }
 
     /**

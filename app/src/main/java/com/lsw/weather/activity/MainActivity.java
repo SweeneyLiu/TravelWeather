@@ -57,8 +57,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.hugeterry.updatefun.UpdateFunGO;
-import cn.hugeterry.updatefun.config.UpdateKey;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
