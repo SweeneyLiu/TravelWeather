@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 
-import im.fir.sdk.FIR;
 
 
 public class TravelWeatherApplication extends Application {
@@ -20,7 +19,6 @@ public class TravelWeatherApplication extends Application {
             return;
         }
         LeakCanary.install(this);
-        FIR.init(this);
     }
 
     public static Context getContext(){

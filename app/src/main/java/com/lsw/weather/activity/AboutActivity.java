@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lsw.weather.R;
-import com.lsw.weather.util.CheckUpdateUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,7 +69,6 @@ public class AboutActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.new_version:
-                CheckUpdateUtils.checkUpdate(AboutActivity.this);
                 break;
             case R.id.favourable_comment:
                 openApplicationMarket();
